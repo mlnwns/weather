@@ -1,5 +1,27 @@
+import { getVillageForecast } from '@/entities/weather/api/getVillageForecast';
+import { useEffect } from 'react';
+
 function App() {
-  return <h1 className="text-3xl font-bold text-blue-600">Tailwind CSS 적용 완료</h1>;
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const data = await getVillageForecast({
+          base_date: '20260411',
+          base_time: '0200',
+          nx: 60,
+          ny: 127,
+        });
+
+        console.log('날씨 데이터:', data.items.item);
+      } catch (error) {
+        console.error('API 호출 실패:', error);
+      }
+    };
+
+    fetchWeather();
+  }, []);
+
+  return <div>날씨 데이터 테스트</div>;
 }
 
 export default App;
