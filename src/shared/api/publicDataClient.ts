@@ -1,5 +1,14 @@
 import axios, { type AxiosResponse } from 'axios';
-import type { PublicDataResponse } from './publicDataClient.types';
+
+export type PublicDataResponse<T> = {
+  response: {
+    header: {
+      resultCode: string;
+      resultMsg: string;
+    };
+    body: T;
+  };
+};
 
 const PUBLIC_DATA_SUCCESS_CODE = '00';
 const PUBLIC_DATA_REQUEST_TIMEOUT = 8000;

@@ -1,4 +1,4 @@
-import { getVillageForecast } from '@/entities/weather/api/getVillageForecast';
+import { getVillageForecast } from '@/entities/weather';
 import { useEffect } from 'react';
 
 function App() {

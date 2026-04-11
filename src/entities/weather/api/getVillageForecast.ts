@@ -1,6 +1,5 @@
-import { publicDataClient } from '@/shared/api/publicDataClient';
+import { publicDataClient, type PublicDataResponse } from '@/shared/api/publicDataClient';
 import type { VillageForecastBody } from '../model/weather.types';
-import type { PublicDataResponse } from '@/shared/api/publicDataClient.types';
 
 interface GetVillageForecastParams {
   base_date: string;
