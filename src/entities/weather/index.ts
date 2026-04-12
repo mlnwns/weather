@@ -1,4 +1,3 @@
-export { useVillageForecastQuery } from './api/useVillageForecastQuery';
 export type {
   VillageForecastItem,
   VillageForecastBody,
