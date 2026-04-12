@@ -1,1 +1,6 @@
-export { getVillageForecast } from './api/getVillageForecast';
+export { useVillageForecastQuery } from './api/useVillageForecastQuery';
+export type {
+  VillageForecastItem,
+  VillageForecastBody,
+  VillageForecastParams,
+} from './model/weather.types';

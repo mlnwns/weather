@@ -1,27 +1,19 @@
-import { getVillageForecast } from '@/entities/weather';
-import { useEffect } from 'react';
+import { useVillageForecastQuery } from '@/entities/weather';
 
 function App() {
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const data = await getVillageForecast({
-          base_date: '20260411',
-          base_time: '0200',
-          nx: 60,
-          ny: 127,
-        });
+  const { data, isLoading, isError } = useVillageForecastQuery({
+    base_date: '20260411',
+    base_time: '0200',
+    nx: 60,
+    ny: 127,
+  });
 
-        console.log('날씨 데이터:', data.items.item);
-      } catch (error) {
-        console.error('API 호출 실패:', error);
-      }
-    };
+  if (isLoading) return <div>로딩 중...</div>;
+  if (isError) return <div>에러 발생</div>;
 
-    fetchWeather();
-  }, []);
+  console.log('날씨 데이터:', data?.items.item);
 
-  return <div>날씨 데이터 테스트</div>;
+  return <div>날씨 데이터</div>;
 }
 
 export default App;

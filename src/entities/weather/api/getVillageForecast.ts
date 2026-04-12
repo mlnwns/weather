@@ -1,17 +1,8 @@
 import { publicDataClient, type PublicDataResponse } from '@/shared/api/publicDataClient';
-import type { VillageForecastBody } from '../model/weather.types';
-
-interface GetVillageForecastParams {
-  base_date: string;
-  base_time: string;
-  nx: number;
-  ny: number;
-  numOfRows?: number;
-  pageNo?: number;
-}
+import type { VillageForecastBody, VillageForecastParams } from '../model/weather.types';
 
 export const getVillageForecast = async (
-  params: GetVillageForecastParams,
+  params: VillageForecastParams,
 ): Promise<VillageForecastBody> => {
   const response = await publicDataClient.get<PublicDataResponse<VillageForecastBody>>(
     '/1360000/VilageFcstInfoService_2.0/getVilageFcst',

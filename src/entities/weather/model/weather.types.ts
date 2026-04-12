@@ -37,3 +37,12 @@ export interface VillageForecastBody {
   numOfRows: number;
   totalCount: number;
 }
+
+export interface VillageForecastParams {
+  base_date: string;
+  base_time: string;
+  nx: number;
+  ny: number;
+  numOfRows?: number;
+  pageNo?: number;
+}
