@@ -7,12 +7,7 @@ const ORIGIN_LON = 126.0;
 const ORIGIN_X = 43;
 const ORIGIN_Y = 136;
 
-export type GridCoord = {
-  nx: number;
-  ny: number;
-};
-
-export const convertLatLonToGrid = (lat: number, lon: number): GridCoord => {
+export const convertLatLonToGrid = (lat: number, lon: number): { nx: number; ny: number } => {
   const DEGRAD = Math.PI / 180.0;
 
   const re = EARTH_RADIUS / GRID;

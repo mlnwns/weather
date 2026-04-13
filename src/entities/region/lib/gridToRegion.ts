@@ -1,6 +1,6 @@
 import gridToRegionMapData from '@/shared/assets/korea_grid_to_regions.json';
 
-export type GridCoord = { nx: number; ny: number };
+type GridCoord = { nx: number; ny: number };
 type GridKey = keyof typeof gridToRegionMapData;
 
 const regionLabelMap = new Map<GridKey, string>(
