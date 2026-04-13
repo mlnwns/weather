@@ -6,9 +6,6 @@ const DEFAULT_PAGE_NUMBER = 1;
 
 export const getVillageForecast = async (
   params: VillageForecastParams,
-  options?: {
-    signal?: AbortSignal;
-  },
 ): Promise<VillageForecastBody> => {
   const response = await publicDataClient.get<PublicDataResponse<VillageForecastBody>>(
     '/1360000/VilageFcstInfoService_2.0/getVilageFcst',
@@ -18,7 +15,6 @@ export const getVillageForecast = async (
         numOfRows: params.numOfRows ?? DEFAULT_FORECAST_ROWS,
         pageNo: params.pageNo ?? DEFAULT_PAGE_NUMBER,
       },
-      signal: options?.signal,
     },
   );
 
