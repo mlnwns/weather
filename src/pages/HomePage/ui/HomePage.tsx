@@ -1,7 +1,7 @@
+import Border from '@/shared/ui/Border';
 import { deriveCurrentCondition } from '@/entities/weather/lib/deriveCurrentCondition';
 import { deriveTemperatureSummary } from '@/entities/weather/lib/deriveTemperatureSummary';
-import Border from '@/shared/ui/Border';
-import { useHomeForecastQuery } from './model/useHomeForecastQuery';
+import { useHomeForecastQuery } from '../model/useHomeForecastQuery';
 
 function HomePage() {
   const { data, isPending, isError } = useHomeForecastQuery();
@@ -24,7 +24,7 @@ function HomePage() {
         <h1 className="text-gray-900 font-bold text-2xl px-5 pt-5">날씨</h1>
       </header>
 
-      <section className="w-full p-6">
+      <section className="w-full p-6" aria-label="날씨 요약">
         {isPending && (
           <p className="text-center text-gray-500 text-sm" role="status">
             로딩 중
