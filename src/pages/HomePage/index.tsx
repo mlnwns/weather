@@ -3,10 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 import { convertLatLonToGrid } from '@/entities/weather/lib/convertLatLonToGrid';
 import { getVillageForecast } from '@/entities/weather/api/getVillageForecast';
 import { getForecastBaseDateTime } from '@/entities/weather/lib/getForecastBaseDateTime';
+import { getDailyMinMaxBaseDateTime } from '@/entities/weather/lib/getDailyMinMaxBaseDateTime';
 import { deriveCurrentCondition } from '@/entities/weather/lib/deriveCurrentCondition';
 import { deriveTemperatureSummary } from '@/entities/weather/lib/deriveTemperatureSummary';
 import { fetchIpinfoLocation } from '@/shared/api/ipinfo';
-
 import Border from '@/shared/ui/Border';
 import { getRegionLabelFromGrid } from '@/entities/location/lib/gridToRegion';
 
@@ -15,33 +15,51 @@ function HomePage() {
     queryKey: ['weather', 'forecast', 'ip'],
     staleTime: 1000 * 60 * 30,
     queryFn: async ({ signal }) => {
-      const { base_date, base_time } = getForecastBaseDateTime(new Date());
+      const latestBase = getForecastBaseDateTime(new Date());
+      const dailyMinMaxBase = getDailyMinMaxBaseDateTime(new Date());
 
       const ip = await fetchIpinfoLocation();
 
       const grid = convertLatLonToGrid(ip.lat, ip.lon);
 
-      const forecastPromise = getVillageForecast(
+      const forecastLatestPromise = getVillageForecast(
         {
-          base_date,
-          base_time,
+          base_date: latestBase.base_date,
+          base_time: latestBase.base_time,
           nx: grid.nx,
           ny: grid.ny,
         },
         { signal },
       );
 
+      const isSameBase =
+        latestBase.base_date === dailyMinMaxBase.base_date &&
+        latestBase.base_time === dailyMinMaxBase.base_time;
+
+      const forecastDailyMinMaxPromise = isSameBase
+        ? forecastLatestPromise
+        : getVillageForecast(
+            {
+              base_date: dailyMinMaxBase.base_date,
+              base_time: dailyMinMaxBase.base_time,
+              nx: grid.nx,
+              ny: grid.ny,
+            },
+            { signal },
+          );
+
       const regionLabel = getRegionLabelFromGrid(grid);
 
-      const forecast = await forecastPromise;
+      const [forecastLatest, forecastDailyMinMax] = await Promise.all([
+        forecastLatestPromise,
+        forecastDailyMinMaxPromise,
+      ]);
 
       const locationLabel = regionLabel ?? '알 수 없음';
       return {
-        source: 'ip' as const,
-        ip,
-        grid,
         locationLabel,
-        forecast,
+        forecastLatest,
+        forecastDailyMinMax,
         fetchedAtMs: Date.now(),
       };
     },
@@ -50,13 +68,17 @@ function HomePage() {
   const temperatureSummary = useMemo(() => {
     if (!data) return null;
 
-    return deriveTemperatureSummary(data.forecast.items.item, data.fetchedAtMs);
+    return deriveTemperatureSummary(
+      data.forecastLatest.items.item,
+      data.fetchedAtMs,
+      data.forecastDailyMinMax.items.item,
+    );
   }, [data]);
 
   const currentCondition = useMemo(() => {
     if (!data) return null;
 
-    return deriveCurrentCondition(data.forecast.items.item, data.fetchedAtMs);
+    return deriveCurrentCondition(data.forecastLatest.items.item, data.fetchedAtMs);
   }, [data]);
 
   return (

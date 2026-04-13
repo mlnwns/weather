@@ -4,6 +4,7 @@ import {
   type ForecastValueAtTime,
   toForecastValueAtTime,
 } from './toForecastValueAtTime';
+import { getSeoulYmdFromEpochMs } from './seoulDateTime';
 
 type TodayTempRange = {
   min: ForecastValueAtTime | null;
@@ -13,31 +14,17 @@ type TodayTempRange = {
 export function deriveTemperatureSummary(
   items: VillageForecastItem[],
   nowMs: number,
+  rangeItems: VillageForecastItem[] = items,
 ): {
   currentTemp: ForecastValueAtTime | null;
   todayRange: TodayTempRange;
 } {
-  const todayDateYmd = getSeoulYmd(nowMs);
+  const todayDateYmd = getSeoulYmdFromEpochMs(nowMs);
 
   return {
     currentTemp: pickClosestForecastValue(items, 'TMP', nowMs),
-    todayRange: pickTodayTempRange(items, todayDateYmd),
+    todayRange: pickTodayTempRange(rangeItems, todayDateYmd),
   };
-}
-
-function getSeoulYmd(epochMs: number): string {
-  const formatter = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Asia/Seoul',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  });
-
-  const parts = formatter.formatToParts(new Date(epochMs));
-  const getPartValue = (type: Intl.DateTimeFormatPartTypes) =>
-    parts.find((p) => p.type === type)?.value ?? '';
-
-  return `${getPartValue('year')}${getPartValue('month')}${getPartValue('day')}`;
 }
 
 function pickEarliestByFcstTime(values: ForecastValueAtTime[]): ForecastValueAtTime | null {
