@@ -9,7 +9,7 @@ type SeoulParts = {
   minute: number;
 };
 
-export function getVillageForecastBaseDateTime(now: Date = new Date()): {
+export function getForecastBaseDateTime(now: Date = new Date()): {
   base_date: string;
   base_time: string;
 } {
