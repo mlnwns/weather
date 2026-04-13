@@ -1,6 +1,7 @@
 import Border from '@/shared/ui/Border';
 import { deriveCurrentCondition } from '@/entities/weather/lib/deriveCurrentCondition';
 import { deriveTemperatureSummary } from '@/entities/weather/lib/deriveTemperatureSummary';
+import { WeatherConditionIcon } from '@/entities/weather/ui/WeatherConditionIcon';
 import { useHomeForecastQuery } from '../model/useHomeForecastQuery';
 
 function HomePage() {
@@ -24,7 +25,7 @@ function HomePage() {
         <h1 className="text-gray-900 font-bold text-2xl px-5 pt-5">날씨</h1>
       </header>
 
-      <section className="w-full p-6" aria-label="날씨 요약">
+      <section className="w-full p-10" aria-label="날씨 요약">
         {isPending && (
           <p className="text-center text-gray-500 text-sm" role="status">
             로딩 중
@@ -43,6 +44,7 @@ function HomePage() {
 
             {temperatureSummary && (
               <>
+                <WeatherConditionIcon label={currentCondition?.label} className="w-32 h-32" />
                 <p className="text-6xl font-bold text-gray-900 ">
                   {temperatureSummary.currentTemp
                     ? `${temperatureSummary.currentTemp.value}°`
