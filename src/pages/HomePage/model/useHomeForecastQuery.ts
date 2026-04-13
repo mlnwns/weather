@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { convertLatLonToGrid } from '@/entities/weather/lib/convertLatLonToGrid';
+import { convertLatLonToGrid } from '@/entities/region/lib/convertLatLonToGrid';
 import { getVillageForecast } from '@/entities/weather/api/getVillageForecast';
 import { getForecastBaseDateTime } from '@/entities/weather/lib/getForecastBaseDateTime';
 import { getDailyMinMaxBaseDateTime } from '@/entities/weather/lib/getDailyMinMaxBaseDateTime';
