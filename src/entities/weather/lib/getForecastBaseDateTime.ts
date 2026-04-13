@@ -16,14 +16,13 @@ export function getForecastBaseDateTime(now: Date = new Date()): {
   const seoulNow = toSeoulDateTimeParts(now);
   const safeNow = subtractMinutesFromSeoulTime(seoulNow, KMA_API_DELAY_MINUTES);
 
-  const hhmm = `${to2DigitString(safeNow.hour)}${to2DigitString(safeNow.minute)}`;
+  const safeNowTimeHHmm = `${to2DigitString(safeNow.hour)}${to2DigitString(safeNow.minute)}`;
 
-  const picked = BASE_TIMES.find((t) => t <= hhmm);
-  if (picked) {
-    return { base_date: toYmd(safeNow), base_time: picked };
+  const pickedBaseTimeHHmm = BASE_TIMES.find((baseTimeHHmm) => baseTimeHHmm <= safeNowTimeHHmm);
+  if (pickedBaseTimeHHmm) {
+    return { base_date: toYmd(safeNow), base_time: pickedBaseTimeHHmm };
   }
 
-  // 02:00 이전에는 전날 23:00 사용
   const prevDay = subtractMinutesFromSeoulTime({ ...safeNow, hour: 0, minute: 0 }, 1);
   return { base_date: toYmd(prevDay), base_time: '2300' };
 }
