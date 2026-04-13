@@ -4,7 +4,7 @@ import { getVillageForecast } from '@/entities/weather/api/getVillageForecast';
 import { getForecastBaseDateTime } from '@/entities/weather/lib/getForecastBaseDateTime';
 import { getDailyMinMaxBaseDateTime } from '@/entities/weather/lib/getDailyMinMaxBaseDateTime';
 import { fetchIpinfoLocation } from '@/shared/api/ipinfo';
-import { getRegionLabelFromGrid } from '@/entities/location/lib/gridToRegion';
+import { getRegionLabelFromGrid } from '@/entities/region';
 
 type HomeForecastQueryData = {
   locationLabel: string;
