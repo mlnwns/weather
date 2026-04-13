@@ -1,3 +1,5 @@
+import type { KoreaRegionGrid } from '../model/region.types';
+
 const EARTH_RADIUS = 6371.00877;
 const GRID = 5.0;
 const STANDARD_LAT_1 = 30.0;
@@ -7,7 +9,7 @@ const ORIGIN_LON = 126.0;
 const ORIGIN_X = 43;
 const ORIGIN_Y = 136;
 
-export const convertLatLonToGrid = (lat: number, lon: number): { nx: number; ny: number } => {
+export const convertLatLonToGrid = (lat: number, lon: number): KoreaRegionGrid => {
   const DEGRAD = Math.PI / 180.0;
 
   const re = EARTH_RADIUS / GRID;
