@@ -3,9 +3,12 @@ import { deriveCurrentCondition } from '@/entities/weather/lib/deriveCurrentCond
 import { deriveTemperatureSummary } from '@/entities/weather/lib/deriveTemperatureSummary';
 import { WeatherConditionIcon } from '@/entities/weather/ui/WeatherConditionIcon';
 import { useHomeForecastQuery } from '../model/useHomeForecastQuery';
+import { SearchField } from '@/shared/ui/Icon/SearchField';
+import { useState } from 'react';
 
 function HomePage() {
   const { data, isPending, isError } = useHomeForecastQuery();
+  const [searchValue, setSearchValue] = useState('');
 
   const temperatureSummary = data
     ? deriveTemperatureSummary(
@@ -24,7 +27,7 @@ function HomePage() {
       <header>
         <h1 className="text-gray-900 font-bold text-2xl px-5 pt-5">날씨</h1>
       </header>
-
+      <SearchField value={searchValue} onChange={setSearchValue} />
       <section className="w-full p-10" aria-label="날씨 요약">
         {isPending && (
           <p className="text-center text-gray-500 text-sm" role="status">
