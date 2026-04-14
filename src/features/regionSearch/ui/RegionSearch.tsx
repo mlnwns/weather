@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import SearchField from '@/shared/ui/SearchField';
 import type { KoreaRegionWithGrid } from '@/entities/region';
@@ -34,9 +34,7 @@ export function RegionSearch({ onSelect, placeholder = '지역을 검색하세�
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [activeIndex, setActiveIndex] = useState(-1);
 
-  const suggestions = useMemo(() => {
-    return searchKoreaRegions(koreaRegionsWithGrid, query, 8);
-  }, [query]);
+  const suggestions = searchKoreaRegions(koreaRegionsWithGrid, query, 8);
 
   const resolvedActiveIndex =
     suggestions.length === 0
