@@ -17,7 +17,7 @@ export function useRegionForecastQuery(regionInfo: KoreaRegionWithGrid | undefin
     enabled: Boolean(regionInfo),
     staleTime: 1000 * 60 * 30,
     queryFn: async () => {
-      if (!regionInfo) throw new Error('Region is required');
+      if (!regionInfo) throw new Error('지역 정보가 필요합니다.');
 
       const fetchedAt = new Date();
       const fetchedAtMs = fetchedAt.getTime();
