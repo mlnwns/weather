@@ -1,5 +1,5 @@
-import HomePage from '@/pages/HomePage';
-import RegionPage from '@/pages/RegionPage';
+import HomePage from '@/pages/home';
+import RegionPage from '@/pages/region';
 import { Routes, Route } from 'react-router';
 
 export function AppRouter() {
