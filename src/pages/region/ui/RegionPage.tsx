@@ -2,7 +2,8 @@ import Border from '@/shared/ui/Border';
 import ArrowIcon from '@/shared/ui/icons/ArrowIcon';
 import { deriveCurrentCondition, deriveTemperatureSummary } from '@/entities/weather';
 import { getKoreaRegionByValue } from '@/entities/region';
-import { WeatherSummary } from '@/widgets/weatherSummary';
+import WeatherSummary from '@/widgets/weatherSummary';
+import HourlyForecastSection from '@/widgets/hourlyForecast';
 import { useNavigate, useParams } from 'react-router';
 import { useRegionForecastQuery } from '../model/useRegionForecastQuery';
 
@@ -44,16 +45,25 @@ function RegionPage() {
       )}
 
       {regionInfo && (
-        <WeatherSummary
-          isPending={isPending}
-          isError={isError}
-          locationLabel={regionInfo.label}
-          temperatureSummary={temperatureSummary}
-          currentCondition={currentCondition}
-        />
-      )}
+        <>
+          <WeatherSummary
+            isPending={isPending}
+            isError={isError}
+            locationLabel={regionInfo.label}
+            temperatureSummary={temperatureSummary}
+            currentCondition={currentCondition}
+          />
 
-      <Border variant="spacer" />
+          <Border variant="spacer" />
+
+          <HourlyForecastSection
+            isPending={isPending}
+            isError={isError}
+            forecastItems={data?.forecastLatest.items.item ?? null}
+            nowMs={data?.fetchedAtMs ?? 0}
+          />
+        </>
+      )}
     </main>
   );
 }

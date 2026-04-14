@@ -6,7 +6,7 @@ export type HourlyForecastSlot = {
   epochMs: number;
   hourLabel: string;
   conditionLabel: string | null;
-  temperatureC: number | null;
+  temperature: number | null;
   isCurrentHour: boolean;
 };
 
@@ -41,7 +41,7 @@ export function deriveHourlyForecastSlots(
   for (let epochMs = startEpochMs; epochMs <= endEpochMs; epochMs += HOUR_MS) {
     const { fcstDate, fcstTime, hour, slotYmd } = toForecastDateTime(epochMs);
 
-    const temperatureC = getValue(lookup, 'TMP', fcstDate, fcstTime);
+    const temperature = getValue(lookup, 'TMP', fcstDate, fcstTime);
 
     const ptyValue = getValue(lookup, 'PTY', fcstDate, fcstTime);
     const skyValue = getValue(lookup, 'SKY', fcstDate, fcstTime);
@@ -59,7 +59,7 @@ export function deriveHourlyForecastSlots(
       epochMs,
       hourLabel,
       conditionLabel,
-      temperatureC,
+      temperature,
       isCurrentHour: epochMs === startEpochMs,
     });
   }

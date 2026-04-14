@@ -13,4 +13,7 @@ export { deriveTemperatureSummary } from './lib/deriveTemperatureSummary';
 export { getDailyMinMaxBaseDateTime } from './lib/getDailyMinMaxBaseDateTime';
 export { getForecastBaseDateTime } from './lib/getForecastBaseDateTime';
 
+export { deriveHourlyForecastSlots } from './lib/deriveHourlyForecastSlots';
+export type { HourlyForecastSlot } from './lib/deriveHourlyForecastSlots';
+
 export { WeatherConditionIcon } from './ui/WeatherConditionIcon';

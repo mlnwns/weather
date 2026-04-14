@@ -2,7 +2,8 @@ import Border from '@/shared/ui/Border';
 import { deriveCurrentCondition, deriveTemperatureSummary } from '@/entities/weather';
 import { useHomeForecastQuery } from '../model/useHomeForecastQuery';
 import { RegionSearch } from '@/features/regionSearch';
-import { WeatherSummary } from '@/widgets/weatherSummary';
+import WeatherSummary from '@/widgets/weatherSummary';
+import HourlyForecastSection from '@/widgets/hourlyForecast';
 import { useNavigate } from 'react-router';
 import type { KoreaRegionWithGrid } from '@/entities/region';
 
@@ -43,6 +44,13 @@ function HomePage() {
       />
 
       <Border variant="spacer" />
+
+      <HourlyForecastSection
+        isPending={isPending}
+        isError={isError}
+        forecastItems={data?.forecastLatest.items.item ?? null}
+        nowMs={data?.fetchedAtMs ?? 0}
+      />
     </main>
   );
 }
