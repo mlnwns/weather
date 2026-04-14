@@ -4,6 +4,7 @@ import { useHomeForecastQuery } from '../model/useHomeForecastQuery';
 import { RegionSearch } from '@/features/regionSearch';
 import WeatherSummary from '@/widgets/weatherSummary';
 import HourlyForecastSection from '@/widgets/hourlyForecast';
+import BookmarksSection from '@/widgets/bookmarks';
 import { useNavigate } from 'react-router';
 import type { KoreaRegionWithGrid } from '@/entities/region';
 
@@ -51,6 +52,10 @@ function HomePage() {
         forecastItems={data?.forecastLatest.items.item ?? null}
         nowMs={data?.fetchedAtMs ?? 0}
       />
+
+      <Border variant="spacer" />
+
+      <BookmarksSection />
     </main>
   );
 }
