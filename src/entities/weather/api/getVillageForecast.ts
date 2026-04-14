@@ -1,7 +1,7 @@
 import { publicDataClient, type PublicDataResponse } from '@/shared/api/publicDataClient';
 import type { VillageForecastBody, VillageForecastParams } from '../model/weather.types';
 
-const DEFAULT_FORECAST_ROWS = 310;
+const DEFAULT_FORECAST_ROWS = 400;
 const DEFAULT_PAGE_NUMBER = 1;
 
 export const getVillageForecast = async (
