@@ -53,7 +53,7 @@ function HourlyForecastSection({
   };
 
   return (
-    <section className="w-full p-10" aria-label="시간대별 날씨">
+    <section className="w-full px-5 py-10" aria-label="시간대별 날씨">
       <header className="flex items-center justify-between">
         <h2 className="text-base font-semibold text-gray-900">시간대별 날씨</h2>
       </header>
