@@ -73,7 +73,7 @@ export function searchKoreaRegions(
     .slice(0, maxResults);
 }
 
-function normalizeSearchQuery(query: string): string {
+export function normalizeSearchQuery(query: string): string {
   return query.replace(/[\s-]/g, '').trim();
 }
 
