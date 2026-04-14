@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import ArrowIcon from '@/shared/ui/icons/ArrowIcon';
 import { deriveHourlyForecastSlots, type VillageForecastItem } from '@/entities/weather';
 import { HourlyForecastCard } from './HourlyForecastCard';
+import Section from '@/shared/ui/Section';
 
 interface HourlyForecastSectionProps {
   isPending: boolean;
@@ -53,10 +54,7 @@ function HourlyForecastSection({
   };
 
   return (
-    <section className="w-full px-5 py-10" aria-label="시간대별 날씨">
-      <header className="flex items-center justify-between">
-        <h2 className="text-base font-semibold text-gray-900">시간대별 날씨</h2>
-      </header>
+    <Section title="시간대별 날씨">
 
       {isPending && (
         <p className="mt-4 text-center text-gray-500 text-sm" role="status">
@@ -96,8 +94,9 @@ function HourlyForecastSection({
 
           <div
             ref={scrollRef}
-            className="flex gap-3 overflow-x-auto scroll-smooth px-1"
+            className="flex gap-3 overflow-x-auto scroll-smooth px-1 no-scrollbar"
             aria-label="시간대별 예보 목록"
+            tabIndex={-1}
           >
             {slots.map((slot) => (
               <HourlyForecastCard key={slot.epochMs} slot={slot} />
@@ -105,7 +104,7 @@ function HourlyForecastSection({
           </div>
         </div>
       )}
-    </section>
+    </Section>
   );
 }
 
