@@ -1,7 +1,6 @@
 import Border from '@/shared/ui/Border';
-import ArrowIcon from '@/shared/ui/Icon/ArrowIcon';
-import { deriveCurrentCondition } from '@/entities/weather/lib/deriveCurrentCondition';
-import { deriveTemperatureSummary } from '@/entities/weather/lib/deriveTemperatureSummary';
+import ArrowIcon from '@/shared/ui/icons/ArrowIcon';
+import { deriveCurrentCondition, deriveTemperatureSummary } from '@/entities/weather';
 import { getKoreaRegionByValue } from '@/entities/region';
 import { WeatherSummary } from '@/widgets/weatherSummary';
 import { useNavigate, useParams } from 'react-router';

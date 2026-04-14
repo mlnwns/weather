@@ -1,5 +1,6 @@
-import { WeatherConditionIcon, deriveTemperatureSummary } from '@/entities/weather';
-import type { CurrentCondition } from '@/entities/weather';
+import type { CurrentCondition } from '../lib/deriveCurrentCondition';
+import { deriveTemperatureSummary } from '../lib/deriveTemperatureSummary';
+import { WeatherConditionIcon } from './WeatherConditionIcon';
 
 type TemperatureSummary = ReturnType<typeof deriveTemperatureSummary>;
 

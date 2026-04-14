@@ -3,3 +3,14 @@ export type {
   VillageForecastBody,
   VillageForecastParams,
 } from './model/weather.types';
+
+export { getVillageForecast } from './api/getVillageForecast';
+
+export { deriveCurrentCondition } from './lib/deriveCurrentCondition';
+export type { CurrentCondition } from './lib/deriveCurrentCondition';
+
+export { deriveTemperatureSummary } from './lib/deriveTemperatureSummary';
+export { getDailyMinMaxBaseDateTime } from './lib/getDailyMinMaxBaseDateTime';
+export { getForecastBaseDateTime } from './lib/getForecastBaseDateTime';
+
+export { WeatherConditionIcon } from './ui/WeatherConditionIcon';

@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { getVillageForecast } from '@/entities/weather/api/getVillageForecast';
-import { getDailyMinMaxBaseDateTime } from '@/entities/weather/lib/getDailyMinMaxBaseDateTime';
-import { getForecastBaseDateTime } from '@/entities/weather/lib/getForecastBaseDateTime';
+import {
+  getDailyMinMaxBaseDateTime,
+  getForecastBaseDateTime,
+  getVillageForecast,
+} from '@/entities/weather';
 import type { KoreaRegionWithGrid } from '@/entities/region';
 
 type RegionForecastQueryData = {

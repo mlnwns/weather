@@ -1,6 +1,5 @@
 import Border from '@/shared/ui/Border';
-import { deriveCurrentCondition } from '@/entities/weather/lib/deriveCurrentCondition';
-import { deriveTemperatureSummary } from '@/entities/weather/lib/deriveTemperatureSummary';
+import { deriveCurrentCondition, deriveTemperatureSummary } from '@/entities/weather';
 import { useHomeForecastQuery } from '../model/useHomeForecastQuery';
 import { RegionSearch } from '@/features/regionSearch';
 import { WeatherSummary } from '@/widgets/weatherSummary';

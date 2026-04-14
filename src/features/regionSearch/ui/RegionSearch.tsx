@@ -1,8 +1,8 @@
 import { useMemo, useRef, useState } from 'react';
-import { SearchField } from '@/shared/ui/Icon/SearchField';
+import type { KeyboardEvent } from 'react';
+import { SearchField } from '@/shared/ui/SearchField';
 import type { KoreaRegionWithGrid } from '@/entities/region';
-import { koreaRegionsWithGrid, searchKoreaRegions } from '@/entities/region';
-import { normalizeSearchQuery } from '@/entities/region/lib/searchRegions';
+import { koreaRegionsWithGrid, normalizeSearchQuery, searchKoreaRegions } from '@/entities/region';
 
 const NO_REGION_MESSAGE = '해당 장소의 정보가 제공되지 않습니다.';
 
@@ -66,7 +66,7 @@ export function RegionSearch({ onSelect, placeholder = '지역을 검색하세�
     closeDropdown();
   };
 
-  const shouldIgnoreDuplicateNavKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const shouldIgnoreDuplicateNavKey = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.repeat) return false;
     const last = lastNavKeyRef.current;
     if (last && last.key === e.key && e.timeStamp - last.timeStamp < 40) {
@@ -76,7 +76,7 @@ export function RegionSearch({ onSelect, placeholder = '지역을 검색하세�
     return false;
   };
 
-  const handleArrowNavigation = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleArrowNavigation = (e: KeyboardEvent<HTMLDivElement>) => {
     if (suggestions.length === 0) return;
     if (shouldIgnoreDuplicateNavKey(e)) {
       e.preventDefault();
@@ -101,7 +101,7 @@ export function RegionSearch({ onSelect, placeholder = '지역을 검색하세�
     });
   };
 
-  const handleEnter = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleEnter = (e: KeyboardEvent<HTMLDivElement>) => {
     if (resolvedActiveIndex >= 0 && resolvedActiveIndex < suggestions.length) {
       const selected = suggestions[resolvedActiveIndex];
       if (selected) {

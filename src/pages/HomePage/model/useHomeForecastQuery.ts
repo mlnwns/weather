@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { convertLatLonToGrid } from '@/entities/region/lib/convertLatLonToGrid';
-import { getVillageForecast } from '@/entities/weather/api/getVillageForecast';
-import { getForecastBaseDateTime } from '@/entities/weather/lib/getForecastBaseDateTime';
-import { getDailyMinMaxBaseDateTime } from '@/entities/weather/lib/getDailyMinMaxBaseDateTime';
+import { convertLatLonToGrid, getRegionLabelFromGrid } from '@/entities/region';
+import {
+  getDailyMinMaxBaseDateTime,
+  getForecastBaseDateTime,
+  getVillageForecast,
+} from '@/entities/weather';
 import { fetchIpinfoLocation } from '@/shared/api/ipinfo';
-import { getRegionLabelFromGrid } from '@/entities/region';
 
 type HomeForecastQueryData = {
   locationLabel: string;

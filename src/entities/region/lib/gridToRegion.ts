@@ -7,8 +7,8 @@ const regionLabelMap = new Map<GridKey, string>(
   Object.entries(gridToRegionMapData) as [GridKey, string][],
 );
 
-export function toGridKey({ nx, ny }: KoreaRegionGrid): GridKey {
-  return `${nx},${ny}` as GridKey;
+function toGridKey(grid: KoreaRegionGrid): GridKey {
+  return `${grid.nx},${grid.ny}` as GridKey;
 }
 
 export function getRegionLabelFromGrid(grid: KoreaRegionGrid): string | null {
