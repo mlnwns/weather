@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
-import { SearchField } from '@/shared/ui/SearchField';
+import SearchField from '@/shared/ui/SearchField';
 import type { KoreaRegionWithGrid } from '@/entities/region';
 import { koreaRegionsWithGrid, normalizeSearchQuery, searchKoreaRegions } from '@/entities/region';
 

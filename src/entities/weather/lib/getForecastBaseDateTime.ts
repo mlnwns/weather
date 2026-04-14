@@ -6,7 +6,7 @@ import {
 } from './seoulDateTime';
 
 const BASE_TIMES = ['2300', '2000', '1700', '1400', '1100', '0800', '0500', '0200'] as const;
-const KMA_API_DELAY_MINUTES = 45;
+const KMA_API_DELAY_MINUTES = 60;
 
 export function getForecastBaseDateTime(now: Date = new Date()): {
   base_date: string;
