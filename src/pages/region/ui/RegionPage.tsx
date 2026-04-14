@@ -5,11 +5,16 @@ import { getKoreaRegionByValue } from '@/entities/region';
 import WeatherSummary from '@/widgets/weatherSummary';
 import HourlyForecastSection from '@/widgets/hourlyForecast';
 import { useNavigate, useParams } from 'react-router';
-import { useRegionForecastQuery } from '../model/useRegionForecastQuery';
+import { useRegionForecastQuery } from '@/entities/weather';
+import BookmarkFilledIcon from '@/shared/assets/icons/bookmark_filled.svg';
+import BookmarkOutlineIcon from '@/shared/assets/icons/bookmark_outline.svg';
+import { useBookmarks } from '@/entities/bookmark';
 
 function RegionPage() {
   const navigate = useNavigate();
   const { regionValue = '' } = useParams();
+
+  const { add, remove, isBookmarked, isFull } = useBookmarks();
 
   const decodedRegionValue = regionValue ? decodeURIComponent(regionValue) : '';
   const regionInfo = getKoreaRegionByValue(decodedRegionValue);
@@ -27,6 +32,9 @@ function RegionPage() {
   const currentCondition = data
     ? deriveCurrentCondition(data.forecastLatest.items.item, data.fetchedAtMs)
     : null;
+
+  const bookmarked = regionInfo ? isBookmarked(regionInfo.value) : false;
+  const isAddBlockedByLimit = regionInfo ? !bookmarked && isFull : false;
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -50,6 +58,41 @@ function RegionPage() {
             isPending={isPending}
             isError={isError}
             locationLabel={regionInfo.label}
+            titleRight={
+              <button
+                type="button"
+                aria-label={bookmarked ? '즐겨찾기 삭제' : '즐겨찾기 추가'}
+                onClick={() => {
+                  if (!regionInfo) return;
+
+                  if (bookmarked) {
+                    remove(regionInfo.value);
+                  } else if (isAddBlockedByLimit) {
+                    alert('즐겨찾기는 최대 6개까지 추가할 수 있어요.');
+                  } else {
+                    add(regionInfo);
+                  }
+                }}
+                title={
+                  isAddBlockedByLimit
+                    ? '즐겨찾기는 최대 6개까지 추가할 수 있어요.'
+                    : bookmarked
+                      ? '즐겨찾기 삭제'
+                      : '즐겨찾기 추가'
+                }
+                className={
+                  'ml-1 w-8 h-8 grid place-items-center rounded-full hover:bg-gray-200 active:bg-gray-300 transition-colors ' +
+                  (isAddBlockedByLimit ? 'opacity-60' : '')
+                }
+              >
+                <img
+                  src={bookmarked ? BookmarkFilledIcon : BookmarkOutlineIcon}
+                  alt=""
+                  aria-hidden
+                  className="w-5 h-5"
+                />
+              </button>
+            }
             temperatureSummary={temperatureSummary}
             currentCondition={currentCondition}
           />
