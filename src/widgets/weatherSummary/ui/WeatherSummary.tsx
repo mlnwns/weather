@@ -11,7 +11,7 @@ interface WeatherSummaryProps {
   currentCondition: CurrentCondition;
 }
 
-export function WeatherSummary({
+function WeatherSummary({
   isPending,
   isError,
   locationLabel,
@@ -66,3 +66,5 @@ export function WeatherSummary({
     </section>
   );
 }
+
+export default WeatherSummary;

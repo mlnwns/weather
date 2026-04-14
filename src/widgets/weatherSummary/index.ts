@@ -1,1 +1,1 @@
-export { WeatherSummary } from './ui/WeatherSummary';
+export { default } from './ui/WeatherSummary';

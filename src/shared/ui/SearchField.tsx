@@ -7,11 +7,7 @@ interface SearchFieldProps {
   placeholder?: string;
 }
 
-export const SearchField = ({
-  value,
-  onChange,
-  placeholder = '검색어를 입력하세요',
-}: SearchFieldProps) => {
+function SearchField({ value, onChange, placeholder = '검색어를 입력하세요' }: SearchFieldProps) {
   const showClear = value.length > 0;
 
   return (
@@ -45,4 +41,6 @@ export const SearchField = ({
       </div>
     </div>
   );
-};
+}
+
+export default SearchField;
