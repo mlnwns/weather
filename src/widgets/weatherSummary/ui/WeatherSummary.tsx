@@ -1,5 +1,6 @@
 import { WeatherConditionIcon, deriveTemperatureSummary } from '@/entities/weather';
 import type { CurrentCondition } from '@/entities/weather';
+import type { ReactNode } from 'react';
 
 type TemperatureSummary = ReturnType<typeof deriveTemperatureSummary>;
 
@@ -7,6 +8,7 @@ interface WeatherSummaryProps {
   isPending: boolean;
   isError: boolean;
   locationLabel: string;
+  titleRight?: ReactNode;
   temperatureSummary: TemperatureSummary | null;
   currentCondition: CurrentCondition;
 }
@@ -15,6 +17,7 @@ function WeatherSummary({
   isPending,
   isError,
   locationLabel,
+  titleRight,
   temperatureSummary,
   currentCondition,
 }: WeatherSummaryProps) {
@@ -34,7 +37,10 @@ function WeatherSummary({
 
       {!isPending && !isError && (
         <section className="flex flex-col items-center gap-4" aria-label="현재 날씨">
-          <h2 className="text-xl font-semibold text-gray-900">{locationLabel}</h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-semibold text-gray-900">{locationLabel}</h2>
+            {titleRight}
+          </div>
 
           <WeatherConditionIcon label={currentCondition?.label} className="w-32 h-32" />
 
