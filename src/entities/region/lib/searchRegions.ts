@@ -132,17 +132,17 @@ function getLeafSuffixPriority(region: KoreaRegionWithGrid): number {
   const suffix = leaf.slice(-1);
 
   switch (suffix) {
-    case '구':
-      return 0;
     case '시':
+      return 0;
+    case '구':
       return 1;
-    case '군':
-      return 2;
-    case '읍':
-      return 3;
-    case '면':
-      return 4;
     case '동':
+      return 2;
+    case '군':
+      return 3;
+    case '읍':
+      return 4;
+    case '면':
       return 5;
     case '리':
       return 6;
