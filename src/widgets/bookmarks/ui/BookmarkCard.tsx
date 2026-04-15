@@ -10,6 +10,7 @@ import {
   useRegionForecastQuery,
   WeatherConditionIcon,
 } from '@/entities/weather';
+import type { KoreaRegionWithGrid } from '@/entities/region';
 import { useBookmarks, type Bookmark } from '@/entities/bookmark';
 
 interface BookmarkCardProps {
@@ -21,7 +22,6 @@ function BookmarkCard({ bookmark }: BookmarkCardProps) {
   const { remove, updateAlias } = useBookmarks();
 
   const regionInfo = getKoreaRegionByValue(bookmark.regionValue);
-  const { data, isPending, isError } = useRegionForecastQuery(regionInfo);
   const [isEditing, setIsEditing] = useState(false);
   const [draftAlias, setDraftAlias] = useState(bookmark.alias);
 
@@ -32,17 +32,6 @@ function BookmarkCard({ bookmark }: BookmarkCardProps) {
   const handleNavigate = () => {
     navigate(`/region/${encodeURIComponent(bookmark.regionValue)}`);
   };
-  const temperatureSummary = data
-    ? deriveTemperatureSummary(
-        data.forecastLatest.items.item,
-        data.fetchedAtMs,
-        data.forecastDailyMinMax.items.item,
-      )
-    : null;
-
-  const currentCondition = data
-    ? deriveCurrentCondition(data.forecastLatest.items.item, data.fetchedAtMs)
-    : null;
 
   const commitAlias = () => {
     updateAlias(bookmark.regionValue, draftAlias);
@@ -130,46 +119,50 @@ function BookmarkCard({ bookmark }: BookmarkCardProps) {
       </header>
 
       <div className="mt-3">
-        {isPending && (
-          <p className="text-center text-gray-500 text-xs" role="status">
-            로딩 중
-          </p>
-        )}
-
-        {isError && (
+        {regionInfo ? (
+          <BookmarkCardForecast regionInfo={regionInfo} />
+        ) : (
           <p className="text-center text-red-500 text-xs" role="alert">
-            에러
+            지역을 찾을 수 없어요
           </p>
-        )}
-
-        {!isPending && !isError && (
-          <>
-            <div className="flex items-center justify-center gap-2">
-              <WeatherConditionIcon label={currentCondition?.label} className="w-10 h-10" />
-              <p className="text-2xl font-bold text-gray-900">
-                {temperatureSummary?.currentTemp ? `${temperatureSummary.currentTemp.value}°` : '-'}
-              </p>
-            </div>
-
-            <dl className="mt-2 flex justify-center gap-3 text-xs text-gray-500">
-              <dt>최저</dt>
-              <dd className="font-semibold text-gray-900">
-                {temperatureSummary?.todayRange.min
-                  ? `${temperatureSummary.todayRange.min.value}°`
-                  : '-'}
-              </dd>
-
-              <dt>최고</dt>
-              <dd className="font-semibold text-gray-900">
-                {temperatureSummary?.todayRange.max
-                  ? `${temperatureSummary.todayRange.max.value}°`
-                  : '-'}
-              </dd>
-            </dl>
-          </>
         )}
       </div>
     </article>
+  );
+}
+
+function BookmarkCardForecast({ regionInfo }: { regionInfo: KoreaRegionWithGrid }) {
+  const { data } = useRegionForecastQuery(regionInfo);
+
+  const temperatureSummary = deriveTemperatureSummary(
+    data.forecastLatest.items.item,
+    data.fetchedAtMs,
+    data.forecastDailyMinMax.items.item,
+  );
+
+  const currentCondition = deriveCurrentCondition(data.forecastLatest.items.item, data.fetchedAtMs);
+
+  return (
+    <>
+      <div className="flex items-center justify-center gap-2">
+        <WeatherConditionIcon label={currentCondition?.label} className="w-10 h-10" />
+        <p className="text-2xl font-bold text-gray-900">
+          {temperatureSummary?.currentTemp ? `${temperatureSummary.currentTemp.value}°` : '-'}
+        </p>
+      </div>
+
+      <dl className="mt-2 flex justify-center gap-3 text-xs text-gray-500">
+        <dt>최저</dt>
+        <dd className="font-semibold text-gray-900">
+          {temperatureSummary?.todayRange.min ? `${temperatureSummary.todayRange.min.value}°` : '-'}
+        </dd>
+
+        <dt>최고</dt>
+        <dd className="font-semibold text-gray-900">
+          {temperatureSummary?.todayRange.max ? `${temperatureSummary.todayRange.max.value}°` : '-'}
+        </dd>
+      </dl>
+    </>
   );
 }
 

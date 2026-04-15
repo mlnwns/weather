@@ -5,15 +5,13 @@ import { HourlyForecastCard } from './HourlyForecastCard';
 import Section from '@/shared/ui/Section';
 
 interface HourlyForecastSectionProps {
-  isPending: boolean;
-  isError: boolean;
+  isError?: boolean;
   forecastItems: VillageForecastItem[] | null;
   nowMs: number;
 }
 
 function HourlyForecastSection({
-  isPending,
-  isError,
+  isError = false,
   forecastItems,
   nowMs,
 }: HourlyForecastSectionProps) {
@@ -55,20 +53,13 @@ function HourlyForecastSection({
 
   return (
     <Section title="시간대별 날씨">
-
-      {isPending && (
-        <p className="mt-4 text-center text-gray-500 text-sm" role="status">
-          로딩 중
-        </p>
-      )}
-
       {isError && (
         <p className="mt-4 text-center text-red-500 text-sm" role="alert">
           에러 발생
         </p>
       )}
 
-      {!isPending && !isError && (
+      {!isError && (
         <div className="relative mt-4">
           {canScrollLeft && (
             <button

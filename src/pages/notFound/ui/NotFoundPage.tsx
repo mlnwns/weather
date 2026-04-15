@@ -10,9 +10,7 @@ function NotFoundPage() {
 
       <p className="text-lg text-gray-600">페이지를 찾을 수 없습니다.</p>
 
-      <Button variant="primary" onClick={() => navigate('/')}>
-        메인 페이지로 이동
-      </Button>
+      <Button onClick={() => navigate('/')}>메인 페이지로 이동</Button>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { convertLatLonToGrid, getRegionLabelFromGrid } from '@/entities/region';
 import {
   getDailyMinMaxBaseDateTime,
@@ -15,7 +15,7 @@ type HomeForecastQueryData = {
 };
 
 export function useHomeForecastQuery() {
-  return useQuery<HomeForecastQueryData>({
+  return useSuspenseQuery<HomeForecastQueryData>({
     queryKey: ['weather', 'forecast', 'ip'],
     staleTime: 1000 * 60 * 30,
     queryFn: async () => {

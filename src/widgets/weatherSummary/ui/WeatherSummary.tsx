@@ -5,8 +5,7 @@ import type { ReactNode } from 'react';
 type TemperatureSummary = ReturnType<typeof deriveTemperatureSummary>;
 
 interface WeatherSummaryProps {
-  isPending: boolean;
-  isError: boolean;
+  isError?: boolean;
   locationLabel: string;
   titleRight?: ReactNode;
   temperatureSummary: TemperatureSummary | null;
@@ -14,8 +13,7 @@ interface WeatherSummaryProps {
 }
 
 function WeatherSummary({
-  isPending,
-  isError,
+  isError = false,
   locationLabel,
   titleRight,
   temperatureSummary,
@@ -23,19 +21,13 @@ function WeatherSummary({
 }: WeatherSummaryProps) {
   return (
     <section className="w-full p-10" aria-label="날씨 요약">
-      {isPending && (
-        <p className="text-center text-gray-500 text-sm" role="status">
-          로딩 중
-        </p>
-      )}
-
       {isError && (
         <p className="text-center text-red-500 text-sm" role="alert">
           에러 발생
         </p>
       )}
 
-      {!isPending && !isError && (
+      {!isError && (
         <section className="flex flex-col items-center gap-4" aria-label="현재 날씨">
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-semibold text-gray-900">{locationLabel}</h2>

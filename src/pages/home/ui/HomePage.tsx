@@ -7,10 +7,12 @@ import HourlyForecastSection from '@/widgets/hourlyForecast';
 import BookmarksSection from '@/widgets/bookmarks';
 import { useNavigate } from 'react-router';
 import type { KoreaRegionWithGrid } from '@/entities/region';
+import { Suspense } from 'react';
+import DeferredSpinner from '@/shared/ui/DeferredSpinner';
 
 function HomePage() {
-  const { data, isPending, isError } = useHomeForecastQuery();
   const navigate = useNavigate();
+  const { data } = useHomeForecastQuery();
 
   const temperatureSummary = data
     ? deriveTemperatureSummary(
@@ -36,26 +38,31 @@ function HomePage() {
 
       <RegionSearch onSelect={handleSelectRegion} />
 
-      <WeatherSummary
-        isPending={isPending}
-        isError={isError}
-        locationLabel={data?.locationLabel ?? '알 수 없음'}
-        temperatureSummary={temperatureSummary}
-        currentCondition={currentCondition}
-      />
-
-      <Border variant="spacer" />
-
-      <HourlyForecastSection
-        isPending={isPending}
-        isError={isError}
-        forecastItems={data?.forecastLatest.items.item ?? null}
-        nowMs={data?.fetchedAtMs ?? 0}
-      />
-
-      <Border variant="spacer" />
-
-      <BookmarksSection />
+      <div className="flex-1 flex flex-col">
+        <Suspense
+          fallback={
+            <div
+              className="flex flex-1 items-center justify-center min-h-[40vh]"
+              aria-label="날씨 로딩"
+            >
+              <DeferredSpinner />
+            </div>
+          }
+        >
+          <WeatherSummary
+            locationLabel={data?.locationLabel ?? '알 수 없음'}
+            temperatureSummary={temperatureSummary}
+            currentCondition={currentCondition}
+          />
+          <Border variant="spacer" />
+          <HourlyForecastSection
+            forecastItems={data?.forecastLatest.items.item ?? null}
+            nowMs={data?.fetchedAtMs ?? 0}
+          />
+          <Border variant="spacer" />
+          <BookmarksSection />
+        </Suspense>
+      </div>
     </main>
   );
 }

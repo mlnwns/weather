@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import type { KoreaRegionWithGrid } from '@/entities/region';
 import { getVillageForecast } from '../api/getVillageForecast';
 import { getDailyMinMaxBaseDateTime } from '../lib/getDailyMinMaxBaseDateTime';
@@ -11,14 +11,11 @@ type RegionForecastQueryData = {
   fetchedAtMs: number;
 };
 
-export function useRegionForecastQuery(regionInfo: KoreaRegionWithGrid | undefined) {
-  return useQuery<RegionForecastQueryData>({
-    queryKey: ['weather', 'forecast', 'region', regionInfo?.value],
-    enabled: Boolean(regionInfo),
+export function useRegionForecastQuery(regionInfo: KoreaRegionWithGrid) {
+  return useSuspenseQuery<RegionForecastQueryData>({
+    queryKey: ['weather', 'forecast', 'region', regionInfo.value],
     staleTime: 1000 * 60 * 30,
     queryFn: async () => {
-      if (!regionInfo) throw new Error('지역 정보가 필요합니다.');
-
       const fetchedAt = new Date();
       const fetchedAtMs = fetchedAt.getTime();
 

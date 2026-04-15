@@ -9,6 +9,8 @@ import { useRegionForecastQuery } from '@/entities/weather';
 import BookmarkFilledIcon from '@/shared/assets/icons/bookmark_filled.svg';
 import BookmarkOutlineIcon from '@/shared/assets/icons/bookmark_outline.svg';
 import { useBookmarks } from '@/entities/bookmark';
+import { Suspense } from 'react';
+import DeferredSpinner from '@/shared/ui/DeferredSpinner';
 
 function RegionPage() {
   const navigate = useNavigate();
@@ -18,20 +20,6 @@ function RegionPage() {
 
   const decodedRegionValue = regionValue ? decodeURIComponent(regionValue) : '';
   const regionInfo = getKoreaRegionByValue(decodedRegionValue);
-
-  const { data, isPending, isError } = useRegionForecastQuery(regionInfo);
-
-  const temperatureSummary = data
-    ? deriveTemperatureSummary(
-        data.forecastLatest.items.item,
-        data.fetchedAtMs,
-        data.forecastDailyMinMax.items.item,
-      )
-    : null;
-
-  const currentCondition = data
-    ? deriveCurrentCondition(data.forecastLatest.items.item, data.fetchedAtMs)
-    : null;
 
   const bookmarked = regionInfo ? isBookmarked(regionInfo.value) : false;
   const isAddBlockedByLimit = regionInfo ? !bookmarked && isFull : false;
@@ -53,61 +41,99 @@ function RegionPage() {
       )}
 
       {regionInfo && (
-        <>
-          <WeatherSummary
-            isPending={isPending}
-            isError={isError}
-            locationLabel={regionInfo.label}
-            titleRight={
-              <button
-                type="button"
-                aria-label={bookmarked ? '즐겨찾기 삭제' : '즐겨찾기 추가'}
-                onClick={() => {
-                  if (!regionInfo) return;
-
-                  if (bookmarked) {
-                    remove(regionInfo.value);
-                  } else if (isAddBlockedByLimit) {
-                    alert('즐겨찾기는 최대 6개까지 추가할 수 있어요.');
-                  } else {
-                    add(regionInfo);
-                  }
-                }}
-                title={
-                  isAddBlockedByLimit
-                    ? '즐겨찾기는 최대 6개까지 추가할 수 있어요.'
-                    : bookmarked
-                      ? '즐겨찾기 삭제'
-                      : '즐겨찾기 추가'
-                }
-                className={
-                  'ml-1 w-8 h-8 grid place-items-center rounded-full hover:bg-gray-200 active:bg-gray-300 transition-colors ' +
-                  (isAddBlockedByLimit ? 'opacity-60' : '')
-                }
+        <div className="flex-1 flex flex-col">
+          <Suspense
+            fallback={
+              <div
+                className="flex flex-1 items-center justify-center min-h-[40vh]"
+                aria-label="날씨 로딩"
               >
-                <img
-                  src={bookmarked ? BookmarkFilledIcon : BookmarkOutlineIcon}
-                  alt=""
-                  aria-hidden
-                  className="w-5 h-5"
-                />
-              </button>
+                <DeferredSpinner />
+              </div>
             }
-            temperatureSummary={temperatureSummary}
-            currentCondition={currentCondition}
-          />
-
-          <Border variant="spacer" />
-
-          <HourlyForecastSection
-            isPending={isPending}
-            isError={isError}
-            forecastItems={data?.forecastLatest.items.item ?? null}
-            nowMs={data?.fetchedAtMs ?? 0}
-          />
-        </>
+          >
+            <RegionForecastSections
+              regionInfo={regionInfo}
+              bookmarked={bookmarked}
+              isAddBlockedByLimit={isAddBlockedByLimit}
+              onToggleBookmark={() => {
+                if (bookmarked) {
+                  remove(regionInfo.value);
+                } else if (isAddBlockedByLimit) {
+                  alert('즐겨찾기는 최대 6개까지 추가할 수 있어요.');
+                } else {
+                  add(regionInfo);
+                }
+              }}
+            />
+          </Suspense>
+        </div>
       )}
     </main>
+  );
+}
+
+function RegionForecastSections({
+  regionInfo,
+  bookmarked,
+  isAddBlockedByLimit,
+  onToggleBookmark,
+}: {
+  regionInfo: NonNullable<ReturnType<typeof getKoreaRegionByValue>>;
+  bookmarked: boolean;
+  isAddBlockedByLimit: boolean;
+  onToggleBookmark: () => void;
+}) {
+  const { data } = useRegionForecastQuery(regionInfo);
+
+  const temperatureSummary = deriveTemperatureSummary(
+    data.forecastLatest.items.item,
+    data.fetchedAtMs,
+    data.forecastDailyMinMax.items.item,
+  );
+
+  const currentCondition = deriveCurrentCondition(data.forecastLatest.items.item, data.fetchedAtMs);
+
+  return (
+    <>
+      <WeatherSummary
+        locationLabel={regionInfo.label}
+        titleRight={
+          <button
+            type="button"
+            aria-label={bookmarked ? '즐겨찾기 삭제' : '즐겨찾기 추가'}
+            onClick={onToggleBookmark}
+            title={
+              isAddBlockedByLimit
+                ? '즐겨찾기는 최대 6개까지 추가할 수 있어요.'
+                : bookmarked
+                  ? '즐겨찾기 삭제'
+                  : '즐겨찾기 추가'
+            }
+            className={
+              'ml-1 w-8 h-8 grid place-items-center rounded-full hover:bg-gray-200 active:bg-gray-300 transition-colors ' +
+              (isAddBlockedByLimit ? 'opacity-60' : '')
+            }
+          >
+            <img
+              src={bookmarked ? BookmarkFilledIcon : BookmarkOutlineIcon}
+              alt=""
+              aria-hidden
+              className="w-5 h-5"
+            />
+          </button>
+        }
+        temperatureSummary={temperatureSummary}
+        currentCondition={currentCondition}
+      />
+
+      <Border variant="spacer" />
+
+      <HourlyForecastSection
+        forecastItems={data.forecastLatest.items.item}
+        nowMs={data.fetchedAtMs}
+      />
+    </>
   );
 }
 
