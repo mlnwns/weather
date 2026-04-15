@@ -1,10 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { convertLatLonToGrid, getRegionLabelFromGrid } from '@/entities/region';
-import {
-  getDailyMinMaxBaseDateTime,
-  getForecastBaseDateTime,
-  getVillageForecast,
-} from '@/entities/weather';
+import { getForecastBaseDateTime, getVillageForecast } from '@/entities/weather';
 import { fetchIpinfoLocation } from '@/shared/api/ipinfo';
 
 type HomeForecastQueryData = {
@@ -23,7 +19,6 @@ export function useHomeForecastQuery() {
       const fetchedAtMs = fetchedAt.getTime();
 
       const latestBase = getForecastBaseDateTime(fetchedAt);
-      const dailyMinMaxBase = getDailyMinMaxBaseDateTime(fetchedAt);
 
       const ip = await fetchIpinfoLocation();
       const grid = convertLatLonToGrid(ip.lat, ip.lon);
@@ -37,21 +32,8 @@ export function useHomeForecastQuery() {
         ny: grid.ny,
       });
 
-      const forecastDailyMinMaxPromise =
-        latestBase.base_date === dailyMinMaxBase.base_date &&
-        latestBase.base_time === dailyMinMaxBase.base_time
-          ? forecastLatestPromise
-          : getVillageForecast({
-              base_date: dailyMinMaxBase.base_date,
-              base_time: dailyMinMaxBase.base_time,
-              nx: grid.nx,
-              ny: grid.ny,
-            });
-
-      const [forecastLatest, forecastDailyMinMax] = await Promise.all([
-        forecastLatestPromise,
-        forecastDailyMinMaxPromise,
-      ]);
+      const forecastLatest = await forecastLatestPromise;
+      const forecastDailyMinMax = forecastLatest;
 
       return {
         locationLabel,

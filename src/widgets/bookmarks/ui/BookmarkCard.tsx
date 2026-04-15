@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import EditIcon from '@/shared/assets/icons/edit.svg';
 import CheckIcon from '@/shared/assets/icons/check.svg';
@@ -120,7 +120,18 @@ function BookmarkCard({ bookmark }: BookmarkCardProps) {
 
       <div className="mt-3">
         {regionInfo ? (
-          <BookmarkCardForecast regionInfo={regionInfo} />
+          <Suspense
+            fallback={
+              <div
+                className="min-h-16 flex items-center justify-center"
+                aria-label="즐겨찾기 날씨 로딩"
+              >
+                <p className="text-center text-gray-500 text-xs">불러오는 중</p>
+              </div>
+            }
+          >
+            <BookmarkCardForecast regionInfo={regionInfo} />
+          </Suspense>
         ) : (
           <p className="text-center text-red-500 text-xs" role="alert">
             지역을 찾을 수 없어요

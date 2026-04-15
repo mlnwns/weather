@@ -12,19 +12,6 @@ import DeferredSpinner from '@/shared/ui/DeferredSpinner';
 
 function HomePage() {
   const navigate = useNavigate();
-  const { data } = useHomeForecastQuery();
-
-  const temperatureSummary = data
-    ? deriveTemperatureSummary(
-        data.forecastLatest.items.item,
-        data.fetchedAtMs,
-        data.forecastDailyMinMax.items.item,
-      )
-    : null;
-
-  const currentCondition = data
-    ? deriveCurrentCondition(data.forecastLatest.items.item, data.fetchedAtMs)
-    : null;
 
   const handleSelectRegion = (region: KoreaRegionWithGrid) => {
     navigate(`/region/${encodeURIComponent(region.value)}`);
@@ -49,21 +36,47 @@ function HomePage() {
             </div>
           }
         >
-          <WeatherSummary
-            locationLabel={data?.locationLabel ?? '알 수 없음'}
-            temperatureSummary={temperatureSummary}
-            currentCondition={currentCondition}
-          />
-          <Border variant="spacer" />
-          <HourlyForecastSection
-            forecastItems={data?.forecastLatest.items.item ?? null}
-            nowMs={data?.fetchedAtMs ?? 0}
-          />
-          <Border variant="spacer" />
-          <BookmarksSection />
+          <HomeForecastSections />
         </Suspense>
       </div>
     </main>
+  );
+}
+
+function HomeForecastSections() {
+  const { data } = useHomeForecastQuery();
+
+  const temperatureSummary = data
+    ? deriveTemperatureSummary(
+        data.forecastLatest.items.item,
+        data.fetchedAtMs,
+        data.forecastDailyMinMax.items.item,
+      )
+    : null;
+
+  const currentCondition = data
+    ? deriveCurrentCondition(data.forecastLatest.items.item, data.fetchedAtMs)
+    : null;
+
+  return (
+    <>
+      <WeatherSummary
+        locationLabel={data?.locationLabel ?? '알 수 없음'}
+        temperatureSummary={temperatureSummary}
+        currentCondition={currentCondition}
+      />
+
+      <Border variant="spacer" />
+
+      <HourlyForecastSection
+        forecastItems={data?.forecastLatest.items.item ?? null}
+        nowMs={data?.fetchedAtMs ?? 0}
+      />
+
+      <Border variant="spacer" />
+
+      <BookmarksSection />
+    </>
   );
 }
 
