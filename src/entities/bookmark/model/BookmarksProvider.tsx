@@ -1,25 +1,14 @@
 import type { PropsWithChildren } from 'react';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { KoreaRegionWithGrid } from '@/entities/region';
 import type { Bookmark } from './bookmark.types';
+import { BookmarksContext, type BookmarksContextValue } from './useBookmarks';
 import {
   BOOKMARKS_MAX,
   BOOKMARKS_STORAGE_KEY,
   readBookmarks,
   writeBookmarks,
 } from '../lib/bookmarkStorage';
-
-type BookmarksContextValue = {
-  bookmarks: Bookmark[];
-  max: number;
-  isFull: boolean;
-  isBookmarked: (regionValue: string) => boolean;
-  add: (region: KoreaRegionWithGrid) => void;
-  remove: (regionValue: string) => void;
-  updateAlias: (regionValue: string, alias: string) => void;
-};
-
-const BookmarksContext = createContext<BookmarksContextValue | null>(null);
 
 export function BookmarksProvider({ children }: PropsWithChildren) {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>(() => readBookmarks());
@@ -86,12 +75,4 @@ export function BookmarksProvider({ children }: PropsWithChildren) {
   };
 
   return <BookmarksContext.Provider value={contextValue}>{children}</BookmarksContext.Provider>;
-}
-
-export function useBookmarks() {
-  const contextValue = useContext(BookmarksContext);
-  if (!contextValue) {
-    throw new Error('useBookmarks는 BookmarksProvider 안에서만 사용할 수 있습니다.');
-  }
-  return contextValue;
 }

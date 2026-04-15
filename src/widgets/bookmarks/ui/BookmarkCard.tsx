@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useNavigate } from 'react-router';
 import EditIcon from '@/shared/assets/icons/edit.svg';
 import CheckIcon from '@/shared/assets/icons/check.svg';
@@ -23,11 +23,7 @@ function BookmarkCard({ bookmark }: BookmarkCardProps) {
 
   const regionInfo = getKoreaRegionByValue(bookmark.regionValue);
   const [isEditing, setIsEditing] = useState(false);
-  const [draftAlias, setDraftAlias] = useState(bookmark.alias);
-
-  useEffect(() => {
-    if (!isEditing) setDraftAlias(bookmark.alias);
-  }, [bookmark.alias, isEditing]);
+  const [draftAlias, setDraftAlias] = useState('');
 
   const handleNavigate = () => {
     navigate(`/region/${encodeURIComponent(bookmark.regionValue)}`);
@@ -93,7 +89,10 @@ function BookmarkCard({ bookmark }: BookmarkCardProps) {
             onClick={(e) => {
               e.stopPropagation();
               if (isEditing) commitAlias();
-              else setIsEditing(true);
+              else {
+                setDraftAlias(bookmark.alias);
+                setIsEditing(true);
+              }
             }}
             aria-label={isEditing ? '별칭 저장' : '별칭 편집'}
             className="w-8 h-8 grid place-items-center rounded-full hover:bg-gray-200 active:bg-gray-300 transition-colors cursor-pointer"
