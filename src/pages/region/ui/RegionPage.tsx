@@ -11,6 +11,8 @@ import BookmarkOutlineIcon from '@/shared/assets/icons/bookmark_outline.svg';
 import { useBookmarks } from '@/entities/bookmark';
 import { Suspense } from 'react';
 import DeferredSpinner from '@/shared/ui/DeferredSpinner';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import ErrorBoundary from '@/shared/ui/ErrorBoundary';
 
 function RegionPage() {
   const navigate = useNavigate();
@@ -42,31 +44,40 @@ function RegionPage() {
 
       {regionInfo && (
         <div className="flex-1 flex flex-col">
-          <Suspense
-            fallback={
-              <div
-                className="flex flex-1 items-center justify-center min-h-[40vh]"
-                aria-label="날씨 로딩"
+          <QueryErrorResetBoundary>
+            {({ reset }) => (
+              <ErrorBoundary
+                onReset={reset}
+                title="날씨를 불러오지 못했어요"
               >
-                <DeferredSpinner />
-              </div>
-            }
-          >
-            <RegionForecastSections
-              regionInfo={regionInfo}
-              bookmarked={bookmarked}
-              isAddBlockedByLimit={isAddBlockedByLimit}
-              onToggleBookmark={() => {
-                if (bookmarked) {
-                  remove(regionInfo.value);
-                } else if (isAddBlockedByLimit) {
-                  alert('즐겨찾기는 최대 6개까지 추가할 수 있어요.');
-                } else {
-                  add(regionInfo);
-                }
-              }}
-            />
-          </Suspense>
+                <Suspense
+                  fallback={
+                    <div
+                      className="flex flex-1 items-center justify-center min-h-[40vh]"
+                      aria-label="날씨 로딩"
+                    >
+                      <DeferredSpinner />
+                    </div>
+                  }
+                >
+                  <RegionForecastSections
+                    regionInfo={regionInfo}
+                    bookmarked={bookmarked}
+                    isAddBlockedByLimit={isAddBlockedByLimit}
+                    onToggleBookmark={() => {
+                      if (bookmarked) {
+                        remove(regionInfo.value);
+                      } else if (isAddBlockedByLimit) {
+                        alert('즐겨찾기는 최대 6개까지 추가할 수 있어요.');
+                      } else {
+                        add(regionInfo);
+                      }
+                    }}
+                  />
+                </Suspense>
+              </ErrorBoundary>
+            )}
+          </QueryErrorResetBoundary>
         </div>
       )}
     </main>

@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router';
 import type { KoreaRegionWithGrid } from '@/entities/region';
 import { Suspense } from 'react';
 import DeferredSpinner from '@/shared/ui/DeferredSpinner';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import ErrorBoundary from '@/shared/ui/ErrorBoundary';
 
 function HomePage() {
   const navigate = useNavigate();
@@ -26,18 +28,24 @@ function HomePage() {
       <RegionSearch onSelect={handleSelectRegion} />
 
       <div className="flex-1 flex flex-col">
-        <Suspense
-          fallback={
-            <div
-              className="flex flex-1 items-center justify-center min-h-[40vh]"
-              aria-label="날씨 로딩"
-            >
-              <DeferredSpinner />
-            </div>
-          }
-        >
-          <HomeForecastSections />
-        </Suspense>
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <ErrorBoundary onReset={reset} title="날씨를 불러오지 못했어요">
+              <Suspense
+                fallback={
+                  <div
+                    className="flex flex-1 items-center justify-center min-h-[40vh]"
+                    aria-label="날씨 로딩"
+                  >
+                    <DeferredSpinner />
+                  </div>
+                }
+              >
+                <HomeForecastSections />
+              </Suspense>
+            </ErrorBoundary>
+          )}
+        </QueryErrorResetBoundary>
       </div>
     </main>
   );
