@@ -28,7 +28,7 @@ function WeatherSummary({
       )}
 
       {!isError && (
-        <section className="flex flex-col items-center gap-4" aria-label="현재 날씨">
+        <section className="flex flex-col items-center gap-3" aria-label="현재 날씨">
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-semibold text-gray-900">{locationLabel}</h2>
             {titleRight}
@@ -44,7 +44,7 @@ function WeatherSummary({
             {currentCondition ? currentCondition.label : '-'}
           </p>
 
-          <dl className="flex gap-4 text-base text-gray-500 mt-2">
+          <dl className="flex gap-2 text-base text-gray-500 mt-1">
             <dt>최저</dt>
             <dd className="font-semibold text-gray-900">
               {temperatureSummary?.todayRange.min

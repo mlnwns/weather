@@ -161,7 +161,7 @@ function BookmarkCardForecast({ regionInfo }: { regionInfo: KoreaRegionWithGrid 
         </p>
       </div>
 
-      <dl className="mt-2 flex justify-center gap-3 text-xs text-gray-500">
+      <dl className="mt-2 flex justify-center gap-1 text-xs text-gray-500">
         <dt>최저</dt>
         <dd className="font-semibold text-gray-900">
           {temperatureSummary?.todayRange.min ? `${temperatureSummary.todayRange.min.value}°` : '-'}
