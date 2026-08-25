@@ -108,7 +108,7 @@ npm run preview
 </br>
 
 ## 로딩 처리 및 데이터 패칭 전략
-<img width="500" height="1016" alt="Image" src="https://github.com/user-attachments/assets/f0336692-7a95-4b94-bf6b-30aba206cc7b" />
+<img width="500" alt="Image" src="https://github.com/user-attachments/assets/f0336692-7a95-4b94-bf6b-30aba206cc7b" />
 
 ### 1. 페이지 단위 Suspense 로딩
 
